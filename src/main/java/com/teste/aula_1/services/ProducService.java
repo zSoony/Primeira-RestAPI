@@ -7,13 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.teste.aula_1.models.Product;
-import com.teste.aula_1.repository.ProductRepository;
+import com.teste.aula_1.repository.ProductRepositoryOld;
 
 @Service
 public class ProducService {
 
     @Autowired
-    private ProductRepository productRepository;
+    private ProductRepositoryOld productRepository;
 
     /**
      * metodo para obter lista de todos os produtos
@@ -63,4 +63,3 @@ public class ProducService {
     }
 
 }
-
