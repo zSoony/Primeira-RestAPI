@@ -17,7 +17,7 @@ import com.teste.aula_1.models.Product;
 import com.teste.aula_1.services.ProducService;
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/api/product")
 public class ProductCOntroller {
 
     @Autowired
@@ -34,18 +34,18 @@ public class ProductCOntroller {
         return producService.addict(product);
     }
 
-    @GetMapping("/:{id}")
+    @GetMapping("/{id}")
     public Optional<Product> getFotId(@PathVariable Integer id) {
         return producService.getForId(id);
     }
 
-    @DeleteMapping("/:{id}")
+    @DeleteMapping("/{id}")
     public String delete(@PathVariable Integer id) {
         producService.delete(id);
-        return "produto com id: " + id + "foi deletado com sucesso";
+        return "produto com id: " + id + " foi deletado com sucesso";
     }
 
-    @PutMapping("/:{id}")
+    @PutMapping("/{id}")
     public Product atualize(@RequestBody Product product, @PathVariable Integer id) {
         return producService.atualize(id, product);
 
