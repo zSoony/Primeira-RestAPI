@@ -1,0 +1,15 @@
+objetivo
+
+Criar umaAPI RestFul para controle de Produtos
+
+modelo: (ok)
+Produto: ID, nome, quantidade, valor, descricao
+
+Repositorio de usuario (ok)
+   getAll, getForID, include, remove, atualize
+
+   Serviço de produto: (ok)
+      getAll, getForID, include, remove, atualize
+
+      controler de produto  
+ getAll, getForID, include, remove, atualize
