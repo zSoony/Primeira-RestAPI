@@ -11,5 +11,7 @@ Repositorio de usuario (ok)
    Serviço de produto: (ok)
       getAll, getForID, include, remove, atualize
 
-      controler de produto  
+      controler de produto   ok
  getAll, getForID, include, remove, atualize
+
+ 

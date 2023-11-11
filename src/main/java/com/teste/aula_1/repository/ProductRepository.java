@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 import com.teste.aula_1.models.Product;
+import com.teste.aula_1.models.excepion.ResourceNotFoundException;
 
 @Repository
 public class ProductRepository {
@@ -84,7 +85,7 @@ public class ProductRepository {
         Optional<Product> foundProduct = getForId(product.getId());
 
         if (foundProduct.isEmpty()) {
-            throw new InputMismatchException("Product not found");
+            throw new ResourceNotFoundException("Product not found");
         }
 
         // remover o produto antigo da lista
