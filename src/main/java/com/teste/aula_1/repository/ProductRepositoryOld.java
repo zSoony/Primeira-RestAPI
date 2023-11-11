@@ -54,7 +54,7 @@ public class ProductRepositoryOld {
      * @param product que será adicionado
      * @return retorna o produto que foi adicionado na lista
      */
-    public Product addict(Product product) {
+    public Product saveProduct(Product product) {
         lastId++;
 
         product.setId(lastId);

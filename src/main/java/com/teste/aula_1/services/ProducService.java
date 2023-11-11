@@ -2,26 +2,33 @@ package com.teste.aula_1.services;
 
 import java.util.List;
 import java.util.Optional;
-
+import java.util.stream.Collectors;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.teste.aula_1.models.Product;
-import com.teste.aula_1.repository.ProductRepositoryOld;
+import com.teste.aula_1.models.excepion.ResourceNotFoundException;
+import com.teste.aula_1.repository.ProductRepository;
+import com.teste.aula_1.shared.ProductDTO;
 
 @Service
 public class ProducService {
 
     @Autowired
-    private ProductRepositoryOld productRepository;
+    private ProductRepository productRepository;
 
     /**
      * metodo para obter lista de todos os produtos
      * 
      * @return lista de todos os produtos
      */
-    public List<Product> getAll() {
-        return productRepository.getAll();
+    public List<ProductDTO> getAll() {
+
+        List<Product> products = productRepository.findAll();
+        return products.stream()
+                .map(product -> new ModelMapper().map(product, ProductDTO.class))
+                .collect(Collectors.toList());
+
     }
 
     /**
@@ -30,10 +37,20 @@ public class ProducService {
      * @param id do objeto
      * @return o objeto com id correspondente
      */
-    public Optional<Product> getForId(Integer id) {
-        // inserir regra de validação aqui
+    public Optional<ProductDTO> getForId(Integer id) {
+        // Obtendo produto pelo id
+        Optional<Product> product = productRepository.findById(id);
 
-        return productRepository.getForId(id);
+        // checando se o id e validocaso não seja lança exeption
+        if (product.isEmpty()) {
+            throw new ResourceNotFoundException("Produto com ID: " + id + "não encontrado");
+
+        }
+        // convertendo o optional em dto
+        ProductDTO dto = new ModelMapper().map(product.get(), ProductDTO.class);
+        // criando e retornando optional de dto
+        return Optional.of(dto);
+
     }
 
     /**
@@ -43,23 +60,48 @@ public class ProducService {
      * @return produto adicionado
      *         /*
      */
-    public Product addict(Product product) {
-        // regras de filtro ou validações aqui
+    public ProductDTO addict(ProductDTO productDto) {
+        // removendo id para castro
+        productDto.setId(null);
 
-        return productRepository.addict(product);
+        // criar objeto de mapeamento
+        ModelMapper mapper = new ModelMapper();
+
+        // converter o ProdutoDTO em um Produto
+        Product product = mapper.map(productDto, Product.class);
+
+        // Salvat o Produto no banco
+        product = productRepository.save(product);
+        productDto.setId(product.getId());
+
+        // Retornar o ProdutoDTO atualizado
+        return productDto;
     }
 
     public void delete(Integer id) {
-        // regra para validação inserida aqui
-        productRepository.delete(id);
+        // verificar se existe
+        Optional<Product> product = productRepository.findById(id);
+        if (product.isEmpty()) {
+            // se não existir lança exceção e aviso
+            throw new ResourceNotFoundException(
+                    "Não foi possivel deletar o produto com id: " + id + " produto não existe");
+        }
+        // caso exista deleta o produto com o respectivo id
+        productRepository.deleteById(id);
     }
 
-    public Product atualize(Integer id, Product product) {
-        // ter alguma validação no id
+    public ProductDTO atualize(Integer id, ProductDTO productDto) {
+        // Passar o id para o produto dto
+        productDto.setId(id);
 
-        product.setId(id);
-        return productRepository.atualize(product);
+        // Criar objeto de mapeamento
+        ModelMapper mapper = new ModelMapper();
 
+        // Converter o DTO em Produto
+        Product product = mapper.map(productDto, Product.class);
+
+        // Atualizar no banco de dad
+        return productDto;
     }
 
 }
